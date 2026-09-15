@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduIPS - Portal Pembelajaran IPS Interaktif</title>
+    <style>
+        /* ============================================
+           CSS STYLES - EduIPS
+           ============================================ */
+        
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e3c72;
+            --primary-light: #2a5298;
+            --accent: #ffd700;
+            --bg: #f5f7fa;
+            --text: #333;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --bg: #1a1a2e;
+            --text: #e0e0e0;
+            --card-bg: #16213e;
+            --shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-wrap: wrap;
+        }
+
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .navbar .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .navbar .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-controls button {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-controls button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .search-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--primary-light);
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .search-results {
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .search-results p {
+            padding: 8px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .btn-primary {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .hero .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255,215,0,0.4);
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        body.dark-mode .section-title {
+            color: var(--accent);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        body.dark-mode .card h3 {
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        /* Material Section */
+        .material-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .material-selector button {
+            padding: 12px 30px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        body.dark-mode .material-selector button {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .material-selector button.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        body.dark-mode .material-selector button.active {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        .class-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .class-tabs button {
+            padding: 10px 20px;
+            border: none;
+            background: var(--card-bg);
+            color: var(--text);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .class-tabs button.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+        }
+
+        .material-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .material-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .material-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .material-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            padding: 40px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .material-header .material-emoji {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        .material-header h3 {
+            font-size: 1.5rem;
+        }
+
+        .material-body {
+            padding: 30px;
+        }
+
+        .material-body ul {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .material-body ul li {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: var(--bg);
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            transition: var(--transition);
+        }
+
+        .material-body ul li:hover {
+            transform: translateX(5px);
+        }
+
+        .material-body ul li strong {
+            color: var(--primary);
+        }
+
+        body.dark-mode .material-body ul li strong {
+            color: var(--accent);
+        }
+
+        .btn-download {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30,60,114,0.3);
+        }
+
+        /* Video Section */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .video-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-info h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        body.dark-mode .video-info h4 {
+            color: var(--accent);
+        }
+
+        .video-info p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .quiz-question {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .quiz-option {
+            padding: 15px 20px;
+            background: var(--bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-light);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .quiz-option.wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        body.dark-mode .quiz-option.correct {
+            background: #1a4a2a;
+            border-color: #28a745;
+            color: #d4edda;
+        }
+
+        body.dark-mode .quiz-option.wrong {
+            background: #4a1a1a;
+            border-color: #dc3545;
+            color: #f8d7da;
+        }
+
+        .quiz-feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: bold;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-quiz {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .btn-quiz:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30,60,114,0.3);
+        }
+
+        .quiz-result {
+            text-align: center;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .quiz-result .score {
+            font-size: 3rem;
+            color: var(--accent);
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        /* Essay Section */
+        .essay-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .essay-question {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--bg);
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .essay-container textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid var(--primary-light);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            background: var(--bg);
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+
+        .essay-feedback {
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .essay-feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .essay-feedback.good {
+            background: #d4edda;
+            border: 1px solid #28a745;
+        }
+
+        .essay-feedback.medium {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+        }
+
+        .essay-feedback.poor {
+            background: #f8d7da;
+            border: 1px solid #dc3545;
+        }
+
+        body.dark-mode .essay-feedback.good {
+            background: #1a4a2a;
+            color: #d4edda;
+        }
+
+        body.dark-mode .essay-feedback.medium {
+            background: #4a3a1a;
+            color: #fff3cd;
+        }
+
+        body.dark-mode .essay-feedback.poor {
+            background: #4a1a1a;
+            color: #f8d7da;
+        }
+
+        /* Leaderboard Section */
+        .leaderboard-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .leaderboard-form {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .leaderboard-form .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .leaderboard-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .leaderboard-form input,
+        .leaderboard-form select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid var(--primary-light);
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .leaderboard-table th {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .leaderboard-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .leaderboard-table tr:hover td {
+            background: var(--bg);
+        }
+
+        .medal {
+            font-size: 1.5rem;
+        }
+
+        .btn-reset {
+            background: #dc3545;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            transition: var(--transition);
+        }
+
+        .btn-reset:hover {
+            background: #c82333;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .footer .footer-brand {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 15px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                display: none !important;
+                width: 100%;
+                flex-direction: column;
+                margin-top: 15px;
+            }
+
+            .nav-links.mobile-active {
+                display: flex !important;
+            }
+
+            .nav-links a {
+                padding: 12px;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section {
+                padding: 50px 15px;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .quiz-container,
+            .essay-container,
+            .leaderboard-container {
+                padding: 25px 20px;
+            }
+
+            .material-header {
+                padding: 25px;
+            }
+
+            .material-header .material-emoji {
+                font-size: 3rem;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 4px;
+        }
+
+        /* Print Styles */
+        @media print {
+            .navbar, .hero, .footer, .btn-download, .nav-controls {
+                display: none !important;
+            }
+            body {
+                background: #fff;
+                color: #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         NAVBAR
+         ============================================ -->
+    <nav class="navbar">
+        <a href="#" class="logo">📚 EduIPS</a>
+        <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#beranda">Beranda</a></li>
+            <li><a href="#tentang">Tentang IPS</a></li>
+            <li><a href="#materi">Materi</a></li>
+            <li><a href="#video">Video</a></li>
+            <li><a href="#kuis">Kuis</a></li>
+            <li><a href="#essay">Essay</a></li>
+            <li><a href="#ranking">Ranking</a></li>
+        </ul>
+        <div class="nav-controls">
+            <button onclick="toggleSearch()" title="Pencarian">🔍</button>
+            <button onclick="toggleDarkMode()" title="Dark Mode" id="darkModeBtn">🌙</button>
+        </div>
+    </nav>
+
+    <!-- Search Container -->
+    <div class="search-container" id="searchContainer">
+        <input type="text" id="searchInput" placeholder="Cari materi..." oninput="performSearch()">
+        <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <!-- ============================================
+         HERO SECTION
+         ============================================ -->
+    <section class="hero" id="beranda">
+        <h1>📚 Selamat Datang di EduIPS 🇮🇩</h1>
+        <p>Portal Pembelajaran Ilmu Pengetahuan Sosial Interaktif untuk Siswa Indonesia<br>
+        SMP & SMA — Belajar IPS jadi lebih menyenangkan!</p>
+        <a href="#materi" class="btn-primary">🚀 Mulai Belajar</a>
+    </section>
+
+    <!-- ============================================
+         TENTANG IPS
+         ============================================ -->
+    <section class="section" id="tentang">
+        <h2 class="section-title">📖 Tentang IPS</h2>
+        <p class="section-subtitle">Ilmu Pengetahuan Sosial (IPS) adalah ilmu yang mempelajari kehidupan manusia dalam masyarakat, meliputi aspek geografi, sejarah, sosiologi, dan ekonomi.</p>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">🗺️</div>
+                <h3>Geografi</h3>
+                <p>Mempelajari bumi, atmosfer, kehidupan, dan hubungan manusia dengan lingkungan alamnya. Memahami kondisi geografis Indonesia dan dunia.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📜</div>
+                <h3>Sejarah</h3>
+                <p>Mempelajari peristiwa masa lalu umat manusia, dari zaman praaksara hingga era modern. Memahami perjalanan bangsa Indonesia.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <h3>Sosiologi</h3>
+                <p>Mempelajari masyarakat, interaksi sosial, kelompok sosial, dan dinamika perubahan dalam kehidupan bermasyarakat.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">💰</div>
+                <h3>Ekonomi</h3>
+                <p>Mempelajari kegiatan produksi, distribusi, dan konsumsi. Memahami pasar, perdagangan, dan kegiatan ekonomi masyarakat.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         MATERI PEMBELAJARAN
+         ============================================ -->
+    <section class="section" id="materi">
+        <h2 class="section-title">📝 Materi Pembelajaran</h2>
+        <p class="section-subtitle">Pilih jenjang dan kelas untuk melihat materi yang tersedia</p>
+
+        <!-- Jenjang Selector -->
+        <div class="material-selector">
+            <button class="active" onclick="switchJenjang('smp')">🎒 SMP</button>
+            <button onclick="switchJenjang('sma')">🎓 SMA</button>
+        </div>
+
+        <!-- SMP Content -->
+        <div id="smp-content">
+            <div class="class-tabs" id="smp-tabs">
+                <button class="active" onclick="switchClass('smp', 7)">Kelas 7</button>
+                <button onclick="switchClass('smp', 8)">Kelas 8</button>
+                <button onclick="switchClass('smp', 9)">Kelas 9</button>
+            </div>
+
+            <!-- SMP Kelas 7 -->
+            <div class="material-content active" id="smp-7">
+                <div class="material-card">
+                    <div class="material-header">
+                        <div class="material-emoji">👨‍👩‍👧‍👦</div>
+                        <h3>IPS Kelas 7 SMP</h3>
+                    </div>
+                    <div class="material-body">
+                        <ul>
+                            <li><strong>🏠 Keluarga:</strong> Membentuk keluarga, silsilah keluarga, peran anggota keluarga, dan nilai-nilai dalam keluarga.</li>
+                            <li><strong>🏘️ Lingkungan:</strong> Lingkungan rumah, sekolah, dan masyarakat. Interaksi antar warga dan gotong royong.</li>
+                            <li><strong>🤝 Interaksi Sosial:</strong> Bentuk-bentuk interaksi sosial, komunikasi, dan hubungan sosial di masyarakat.</li>
+                            <li><strong>🌿 Alam Indonesia:</strong> Kondisi alam Indonesia, flora dan fauna, sumber daya alam, dan pemanfaatannya.</li>
+                            <li><strong>💹 Kegiatan Ekonomi:</strong> Kegiatan produksi, distribusi, dan konsumsi. Pelaku ekonomi dan peranannya.</li>
+                        </ul>
+                        <button class="btn-download" onclick="downloadPDF('IPS Kelas 7 SMP')">📥 Download PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMP Kelas 8 -->
+            <div class="material-content" id="smp-8">
+                <div class="material-card">
+                    <div class="material-header">
+                        <div class="material-emoji">🌏</div>
+                        <h3>IPS Kelas 8 SMP</h3>
+                    </div>
+                    <div class="material-body">
+                        <ul>
+                            <li><strong>🏔️ Kondisi Fisik & Sosial:</strong> Kondisi fisik wilayah Indonesia, iklim, cuaca, dan pengaruhnya terhadap kehidupan sosial masyarakat.</li>
+                            <li><strong>👥 Kependudukan:</strong> Dinamika kependudukan Indonesia, piramida penduduk, urbanisasi, dan masalah kependudukan.</li>
+                            <li><strong>🎭 Keragaman Budaya:</strong> Keberagaman suku, budaya, agama, dan tradisi di Indonesia. Bhinneka Tunggal Ika.</li>
+                            <li><strong>🏪 Ekonomi Masyarakat:</strong> Kegiatan ekonomi masyarakat Indonesia, koperasi, UMKM, dan peran pasar.</li>
+                            <li><strong>🇮🇩 Pergerakan Nasional:</strong> Awal pergerakan nasional, organisasi pergerakan, dan semangat kebangsaan.</li>
+                        </ul>
+                        <button class="btn-download" onclick="downloadPDF('IPS Kelas 8 SMP')">📥 Download PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMP Kelas 9 -->
+            <div class="material-content" id="smp-9">
+                <div class="material-card">
+                    <div class="material-header">
+                        <div class="material-emoji">🌐</div>
+                        <h3>IPS Kelas 9 SMP</h3>
+                    </div>
+                    <div class="material-body">
+                        <ul>
+                            <li><strong>🌏 Negara ASEAN:</strong> Karakteristik negara-negara ASEAN, kerjasama regional, dan peran Indonesia dalam ASEAN.</li>
+                            <li><strong>🇨🇳 Tiongkok & Jepang:</strong> Kondisi geografis, ekonomi, dan kebudayaan Tiongkok serta Jepang. Pengaruhnya terhadap dunia.</li>
+                            <li><strong>🇬🇧 Inggris & Amerika Serikat:</strong> Kondisi geografis dan ekonomi negara Inggris serta Amerika Serikat. Peran dalam perekonomian global.</li>
+                            <li><strong>🗺️ Benua-benua:</strong> Karakteristik benua Asia, Afrika, Eropa, Amerika, dan Australia. Fitur geografis masing-masing benua.</li>
+                            <li><strong>📦 Perdagangan Internasional:</strong> Konsep ekspor-impor, neraca perdagangan, dan dampak perdagangan internasional bagi Indonesia.</li>
+                        </ul>
+                        <button class="btn-download" onclick="downloadPDF('IPS Kelas 9 SMP')">📥 Download PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMA Content -->
+        <div id="sma-content" style="display:none;">
+            <div class="class-tabs" id="sma-tabs">
+                <button class="active" onclick="switchClass('sma', 10)">Kelas 10</button>
+                <button onclick="switchClass('sma', 11)">Kelas 11</button>
+                <button onclick="switchClass('sma', 12)">Kelas 12</button>
+            </div>
+
+            <!-- SMA Kelas 10 -->
+            <div class="material-content active" id="sma-10">
+                <div class="material-card">
+                    <div class="material-header">
+                        <div class="material-emoji">🔬</div>
+                        <h3>IPS Kelas 10 SMA</h3>
+                    </div>
+                    <div class="material-body">
+                        <ul>
+                            <li><strong>📚 Pengantar Ilmu Sosial:</strong> Konsep dasar ilmu sosial, pendekatan geografi, sejarah, sosiologi, dan ekonomi dalam memahami masyarakat.</li>
+                            <li><strong>🔍 Penelitian Sosial:</strong> Metode penelitian sosial, jenis-jenis penelitian, pengumpulan data, dan analisis data kualitatif maupun kuantitatif.</li>
+                            <li><strong>🌍 Manusia & Lingkungan:</strong> Hubungan manusia dengan lingkungan, dampak aktivitas manusia terhadap lingkungan, dan upaya pelestariannya.</li>
+                            <li><strong>📊 Demografi:</strong> Komposisi penduduk, mobilitas penduduk, kualitas penduduk, dan bonus demografi Indonesia.</li>
+                            <li><strong>💎 Sumber Daya Alam:</strong> Potensi dan persebaran SDA Indonesia, pengelolaan SDA berkelanjutan, dan peran SDA dalam perekonomian.</li>
+                        </ul>
+                        <button class="btn-download" onclick="downloadPDF('IPS Kelas 10 SMA')">📥 Download PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMA Kelas 11 -->
+            <div class="material-content" id="sma-11">
+                <div class="material-card">
+                    <div class="material-header">
+                        <div class="material-emoji">🤝</div>
+                        <h3>IPS Kelas 11 SMA</h3>
+                    </div>
+                    <div class="material-body">
+                        <ul>
+                            <li><strong>💬 Interaksi Sosial:</strong> Syarat interaksi sosial, bentuk-bentuk interaksi (asosiatif & disosiatif), dan faktor pendorong interaksi.</li>
+                            <li><strong>🎓 Sosialisasi:</strong> Proses sosialisasi, agen sosialisasi (keluarga, sekolah, teman, media), dan pembentukan kepribadian.</li>
+                            <li><strong>👨‍👩‍👧‍👦 Kelompok Sosial:</strong> Pembentukan kelompok sosial, tipe kelompok (primer/sekunder), dan dinamika kelompok dalam masyarakat.</li>
+                            <li><strong>⚔️ Konflik & Integrasi:</strong> Penyebab konflik sosial, bentuk-bentuk konflik, resolusi konflik, dan proses integrasi sosial.</li>
+                            <li><strong>📊 Stratifikasi Sosial:</strong> Pelapisan sosial, kriteria stratifikasi (kekayaan, kekuasaan, kehormatan), mobilitas sosial vertikal & horizontal.</li>
+                        </ul>
+                        <button class="btn-download" onclick="downloadPDF('IPS Kelas 11 SMA')">📥 Download PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMA Kelas 12 -->
+            <div class="material-content" id="sma-12">
+                <div class="material-card">
+                    <div class="material-header">
+                        <div class="material-emoji">🌐</div>
+                        <h3>IPS Kelas 12 SMA</h3>
+                    </div>
+                    <div class="material-body">
+                        <ul>
+                            <li><strong>⚖️ Ketimpangan Sosial:</strong> Bentuk-bentuk ketimpangan sosial, faktor penyebab, dampak, dan upaya mengatasi ketimpangan di masyarakat.</li>
+                            <li><strong>🌍 Globalisasi:</strong> Definisi globalisasi, dimensi globalisasi (ekonomi, politik, sosial-budaya), dampak positif dan negatif globalisasi.</li>
+                            <li><strong>🔄 Perubahan Sosial:</strong> Teori perubahan sosial, faktor pendorong & penghambat, bentuk perubahan sosial, dan modernisasi.</li>
+                            <li><strong>🤲 Pemberdayaan Masyarakat:</strong> Konsep pemberdayaan, strategi pemberdayaan masyarakat, dan contoh program pemberdayaan di Indonesia.</li>
+                            <li><strong>📱 Masyarakat Digital:</strong> Transformasi digital, media sosial, ekonomi digital, dan dampak teknologi terhadap kehidupan bermasyarakat.</li>
+                        </ul>
+                        <button class="btn-download" onclick="downloadPDF('IPS Kelas 12 SMA')">📥 Download PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         VIDEO PEMBELAJARAN
+         ============================================ -->
+    <section class="section" id="video">
+        <h2 class="section-title">🎬 Video Pembelajaran</h2>
+        <p class="section-subtitle">Tonton video pembelajaran untuk memahami materi lebih mendalam</p>
+
+        <div class="video-grid">
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/VE6g2VBkxqI" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <h4>🗺️ Geografi Indonesia</h4>
+                    <p>Mengenal kondisi geografis Indonesia, letak astronomis, dan kekayaan alam Nusantara.</p>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/2MsN8gpT6jY" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <h4>📜 Sejarah Kemerdekaan</h4>
+                    <p>Perjalanan bangsa Indonesia menuju kemerdekaan 17 Agustus 1945.</p>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/GHB3eSFymo0" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <h4>💰 Konsep Ekonomi Dasar</h4>
+                    <p>Memahami konsep dasar ekonomi: kebutuhan, kelangkaan, dan pilihan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         KUIS INTERAKTIF
+         ============================================ -->
+    <section class="section" id="kuis">
+        <h2 class="section-title">🧠 Kuis Interaktif</h2>
+        <p class="section-subtitle">Uji pemahamanmu tentang materi IPS!</p>
+
+        <div class="quiz-container" id="quizContainer">
+            <div class="quiz-progress">
+                <span id="quizProgress">Soal 1 dari 10</span>
+                <span id="quizScore">Skor: 0</span>
+            </div>
+            <div class="quiz-question" id="quizQuestion"></div>
+            <div class="quiz-options" id="quizOptions"></div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+            <button class="btn-quiz" id="btnNext" onclick="nextQuestion()" style="display:none;">Soal Berikutnya ➡️</button>
+            
+            <div class="quiz-result" id="quizResult">
+                <h3>🎉 Kuis Selesai!</h3>
+                <div class="score" id="finalScore"></div>
+                <p id="quizMessage"></p>
+                <button class="btn-quiz" onclick="restartQuiz()" style="margin-top:20px;">🔄 Ulangi Kuis</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         LATIHAN ESSAY
+         ============================================ -->
+    <section class="section" id="essay">
+        <h2 class="section-title">✍️ Latihan Essay</h2>
+        <p class="section-subtitle">Jawab pertanyaan berikut dengan jawaban yang lengkap</p>
+
+        <div class="essay-container">
+            <div class="essay-question">
+                <strong>Soal:</strong> Jelaskan apa yang dimaksud dengan globalisasi dan sebutkan dampak positif serta negatif globalisasi terhadap kehidupan masyarakat Indonesia! Berikan contoh nyata dari kehidupan sehari-hari.
+            </div>
+            <textarea id="essayAnswer" placeholder="Tulis jawabanmu di sini..."></textarea>
+            <button class="btn-quiz" onclick="checkEssay()">✅ Cek Jawaban</button>
+            <div class="essay-feedback" id="essayFeedback"></div>
+            <div id="essayExample" style="display:none; margin-top:20px; padding:20px; background:var(--bg); border-radius:10px;">
+                <h4>📝 Contoh Jawaban:</h4>
+                <p style="margin-top:10px; line-height:1.8;">
+                    Globalisasi adalah proses integrasi internasional yang terjadi karena pertukaran pandangan dunia, produk, pemikiran, dan aspek-aspek kebudayaan lainnya. 
+                    <br><br>
+                    <strong>Dampak positif globalisasi:</strong>
+                    - Kemajuan teknologi dan informasi yang memudahkan komunikasi
+                    - Pertumbuhan ekonomi melalui perdagangan internasional
+                    - Akses terhadap pendidikan dan ilmu pengetahuan yang lebih luas
+                    - Modernisasi di berbagai sektor kehidupan
+                    <br><br>
+                    <strong>Dampak negatif globalisasi:</strong>
+                    - Lunturnya budaya lokal dan kearifan lokal
+                    - Konsumerisme dan gaya hidup barat yang berlebihan
+                    - Kesenjangan sosial yang semakin lebar
+                    - Ketergantungan terhadap produk asing
+                    <br><br>
+                    <strong>Contoh nyata:</strong> Penggunaan smartphone dan media sosial, maraknya produk impor di pasaran, dan adopsi gaya hidup modern di kalangan pemuda Indonesia.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         RANKING / LEADERBOARD
+         ============================================ -->
+    <section class="section" id="ranking">
+        <h2 class="section-title">🏆 Ranking Siswa</h2>
+        <p class="section-subtitle">Simpan skormu dan lihat peringkatmu!</p>
+
+        <div class="leaderboard-container">
+            <div class="leaderboard-form">
+                <div class="form-group">
+                    <label for="studentName">Nama Siswa</label>
+                    <input type="text" id="studentName" placeholder="Masukkan nama...">
+                </div>
+                <div class="form-group">
+                    <label for="studentLevel">Jenjang</label>
+                    <select id="studentLevel">
+                        <option value="SMP">SMP</option>
+                        <option value="SMA">SMA</option>
+                    </select>
+                </div>
+                <button class="btn-quiz" onclick="saveScore()">💾 Simpan Skor</button>
+            </div>
+            <p id="leaderboardNote" style="font-size:0.85rem; opacity:0.7; margin-bottom:15px;">*Skor diambil dari hasil kuis terakhir kamu.</p>
+            
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Nama</th>
+                        <th>Skor</th>
+                        <th>Jenjang</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                </tbody>
+            </table>
+            <button class="btn-reset" onclick="resetLeaderboard()">🗑️ Reset Ranking</button>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+        <p class="footer-brand">📚 EduIPS</p>
+        <p>Dibuat untuk mendukung pembelajaran siswa Indonesia 🇮🇩</p>
+        <p>&copy; <span id="currentYear"></span> EduIPS. Semua hak dilindungi.</p>
+    </footer>
+
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
+    <script>
+        // ============================================
+        // GLOBAL VARIABLES
+        // ============================================
+        let currentQuiz = 0;
+        let quizScore = 0;
+        let lastQuizScore = 0;
+        let isDarkMode = false;
+
+        // ============================================
+        // QUIZ DATA - 10 SOAL
+        // ============================================
+        const quizData = [
+            {
+                question: "Lapisan bumi yang terdiri dari batuan dan mineral padat disebut...",
+                options: ["Atmosfer", "Litosfer", "Hidrosfer", "Biosfer"],
+                correct: 1,
+                explanation: "Litosfer adalah lapisan kerak bumi yang terdiri dari batuan dan mineral padat."
+            },
+            {
+                question: "Organisasi pergerakan nasional pertama di Indonesia yang berdiri tahun 1908 adalah...",
+                options: ["Sarekat Islam", "Budi Utomo", "Muhammadiyah", "Indische Partij"],
+                correct: 1,
+                explanation: "Budi Utomo didirikan pada 20 Mei 1908 oleh Dr. Sutomo dan para mahasiswa STOVIA."
+            },
+            {
+                question: "Proses penyesuaian diri individu terhadap norma dan nilai masyarakat disebut...",
+                options: ["Interaksi sosial", "Sosialisasi", "Mobilitas sosial", "Integrasi sosial"],
+                correct: 1,
+                explanation: "Sosialisasi adalah proses belajar nilai dan norma sosial untuk menjadi anggota masyarakat."
+            },
+            {
+                question: "Kegiatan menyalurkan barang dari produsen ke konsumen disebut...",
+                options: ["Produksi", "Konsumsi", "Distribusi", "Investasi"],
+                correct: 2,
+                explanation: "Distribusi adalah kegiatan menyalurkan barang/jasa dari produsen ke konsumen."
+            },
+            {
+                question: "Negara berikut yang BUKAN anggota ASEAN adalah...",
+                options: ["Thailand", "Filipina", "Timor Leste", "Vietnam"],
+                correct: 2,
+                explanation: "Timor Leste bukan anggota ASEAN. Anggota ASEAN: Indonesia, Malaysia, Thailand, Filipina, Singapura, Brunei, Vietnam, Laos, Myanmar, Kamboja."
+            },
+            {
+                question: "Peristiwa Sumpah Pemuda terjadi pada tanggal...",
+                options: ["20 Mei 1908", "28 Oktober 1928", "17 Agustus 1945", "1 Juni 1945"],
+                correct: 1,
+                explanation: "Sumpah Pemuda diikrarkan pada 28 Oktober 1928 dalam Kongres Pemuda II di Jakarta."
+            },
+            {
+                question: "Pelapisan sosial berdasarkan kekayaan, kekuasaan, dan kehormatan disebut...",
+                options: ["Mobilitas sosial", "Stratifikasi sosial", "Diferensiasi sosial", "Konflik sosial"],
+                correct: 1,
+                explanation: "Stratifikasi sosial adalah pengelompokan masyarakat secara bertingkat berdasarkan kriteria tertentu."
+            },
+            {
+                question: "Kegiatan menjual barang ke luar negeri disebut...",
+                options: ["Impor", "Ekspor", "Barter", "Subsidi"],
+                correct: 1,
+                explanation: "Ekspor adalah kegiatan menjual/mengirim barang ke luar negeri."
+            },
+            {
+                question: "Benua terbesar di dunia adalah...",
+                options: ["Afrika", "Amerika", "Asia", "Eropa"],
+                correct: 2,
+                explanation: "Asia adalah benua terbesar di dunia dengan luas sekitar 44,58 juta km²."
+            },
+            {
+                question: "Dampak negatif globalisasi terhadap budaya lokal adalah...",
+                options: ["Kemajuan teknologi", "Lunturnya budaya lokal", "Pertumbuhan ekonomi", "Akses informasi luas"],
+                correct: 1,
+                explanation: "Salah satu dampak negatif globalisasi adalah lunturnya budaya lokal karena masuknya budaya asing."
+            }
+        ];
+
+        // ============================================
+        // ESSAY KEYWORDS
+        // ============================================
+        const essayKeywords = [
+            "globalisasi", "integrasi", "internasional", "dampak", "positif", "negatif",
+            "teknologi", "informasi", "budaya", "lokal", "ekonomi", "perdagangan",
+            "pendidikan", "modernisasi", "konsumerisme", "kesenjangan", "media sosial",
+            "komunikasi", "asing", "tradisi", "perubahan", "masyarakat"
+        ];
+
+        // ============================================
+        // DARK MODE
+        // ============================================
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode');
+            document.getElementById('darkModeBtn').textContent = isDarkMode ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            toggleDarkMode();
+        }
+
+        // ============================================
+        // MOBILE MENU
+        // ============================================
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('mobile-active');
+        }
+
+        // ============================================
+        // SEARCH FUNCTION
+        // ============================================
+        function toggleSearch() {
+            const container = document.getElementById('searchContainer');
+            container.classList.toggle('active');
+            if (container.classList.contains('active')) {
+                document.getElementById('searchInput').focus();
+            }
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const results = document.getElementById('searchResults');
+            
+            if (query.length < 2) {
+                results.innerHTML = '';
+                return;
+            }
+
+            const allContent = document.querySelectorAll('.material-body ul li');
+            let found = [];
+
+            allContent.forEach(item => {
+                if (item.textContent.toLowerCase().includes(query)) {
+                    found.push(item.textContent.trim());
+                }
+            });
+
+            if (found.length > 0) {
+                results.innerHTML = found.slice(0, 5).map(f => `<p>📌 ${f}</p>`).join('');
+            } else {
+                results.innerHTML = '<p>❌ Tidak ditemukan hasil untuk "' + query + '"</p>';
+            }
+        }
+
+        // ============================================
+        // MATERIAL TABS
+        // ============================================
+        function switchJenjang(jenjang) {
+            // Update buttons
+            document.querySelectorAll('.material-selector button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide content
+            document.getElementById('smp-content').style.display = jenjang === 'smp' ? 'block' : 'none';
+            document.getElementById('sma-content').style.display = jenjang === 'sma' ? 'block' : 'none';
+        }
+
+        function switchClass(jenjang, kelas) {
+            // Update tab buttons
+            const tabsContainer = document.getElementById(jenjang + '-tabs');
+            tabsContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show content
+            const allContents = document.querySelectorAll(`#${jenjang}-content .material-content`);
+            allContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(`${jenjang}-${kelas}`).classList.add('active');
+        }
+
+        // ============================================
+        // DOWNLOAD PDF
+        // ============================================
+        function downloadPDF(title) {
+            const printWindow = window.open('', '_blank');
+            const date = new Date().toLocaleDateString('id-ID', { 
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+            });
+            
+            const activeContent = document.querySelector('.material-content.active');
+            const contentHTML = activeContent.querySelector('.material-card').innerHTML;
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${title} - EduIPS</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
+                        h1 { color: #1e3c72; text-align: center; margin-bottom: 5px; }
+                        .date { text-align: center; color: #666; margin-bottom: 30px; }
+                        .material-header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff; padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+                        .material-emoji { font-size: 3rem; }
+                        .material-body ul { list-style: none; padding: 0; }
+                        .material-body ul li { padding: 15px; margin-bottom: 10px; background: #f5f7fa; border-left: 4px solid #ffd700; border-radius: 8px; }
+                        .material-body ul li strong { color: #1e3c72; }
+                        .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 0.9rem; }
+                    </style>
+                </head>
+                <body>
+                    <h1>📚 EduIPS</h1>
+                    <p class="date">Dicetak pada: ${date}</p>
+                    ${contentHTML}
+                    <div class="footer">
+                        <p>© ${new Date().getFullYear()} EduIPS - Portal Pembelajaran IPS Interaktif</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
+        }
+
+        // ============================================
+        // QUIZ FUNCTIONS
+        // ============================================
+        function loadQuestion() {
+            if (currentQuiz >= quizData.length) {
+                showQuizResult();
+                return;
+            }
+
+            const q = quizData[currentQuiz];
+            document.getElementById('quizProgress').textContent = `Soal ${currentQuiz + 1} dari ${quizData.length}`;
+            document.getElementById('quizScore').textContent = `Skor: ${quizScore}`;
+            document.getElementById('quizQuestion').textContent = q.question;
+            document.getElementById('quizFeedback').classList.remove('show');
+            document.getElementById('btnNext').style.display = 'none';
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const div = document.createElement('div');
+                div.className = 'quiz-option';
+                div.textContent = opt;
+                div.onclick = () => selectAnswer(idx);
+                optionsContainer.appendChild(div);
+            });
+        }
+
+        function selectAnswer(idx) {
+            const q = quizData[currentQuiz];
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('quizFeedback');
+
+            // Disable all options
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+
+            if (idx === q.correct) {
+                options[idx].classList.add('correct');
+                feedback.textContent = '✅ Benar! ' + q.explanation;
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+                feedback.style.border = '1px solid #28a745';
+                quizScore += 10;
+            } else {
+                options[idx].classList.add('wrong');
+                options[q.correct].classList.add('correct');
+                feedback.textContent = '❌ Salah! Jawaban yang benar: ' + q.options[q.correct] + '. ' + q.explanation;
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+                feedback.style.border = '1px solid #dc3545';
+            }
+
+            feedback.classList.add('show');
+            document.getElementById('quizScore').textContent = `Skor: ${quizScore}`;
+            document.getElementById('btnNext').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuiz++;
+            if (currentQuiz >= quizData.length) {
+                showQuizResult();
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quizProgress').style.display = 'none';
+            document.getElementById('quizQuestion').style.display = 'none';
+            document.getElementById('quizOptions').style.display = 'none';
+            document.getElementById('quizFeedback').style.display = 'none';
+            document.getElementById('btnNext').style.display = 'none';
+
+            lastQuizScore = quizScore;
+            const maxScore = quizData.length * 10;
+            const percentage = (quizScore / maxScore) * 100;
+
+            document.getElementById('finalScore').textContent = `${quizScore} / ${maxScore}`;
+            
+            let message = '';
+            if (percentage >= 80) {
+                message = '🌟 Luar biasa! Kamu sangat menguasai materi IPS!';
+            } else if (percentage >= 60) {
+                message = '👍 Bagus! Terus belajar untuk hasil yang lebih baik!';
+            } else if (percentage >= 40) {
+                message = '💪 Cukup baik! Ayo pelajari kembali materi yang belum dipahami.';
+            } else {
+                message = '📖 Jangan menyerah! Pelajari materinya kembali dan coba lagi!';
+            }
+
+            document.getElementById('quizMessage').textContent = message;
+            document.getElementById('quizResult').classList.add('show');
+        }
+
+        function restartQuiz() {
+            currentQuiz = 0;
+            quizScore = 0;
+            document.getElementById('quizProgress').style.display = 'flex';
+            document.getElementById('quizQuestion').style.display = 'block';
+            document.getElementById('quizOptions').style.display = 'flex';
+            document.getElementById('quizResult').classList.remove('show');
+            loadQuestion();
+        }
+
+        // Initialize quiz
+        loadQuestion();
+
+        // ============================================
+        // ESSAY CHECKER
+        // ============================================
+        function checkEssay() {
+            const answer = document.getElementById('essayAnswer').value.toLowerCase().trim();
+            const feedback = document.getElementById('essayFeedback');
+            const example = document.getElementById('essayExample');
+
+            if (answer.length < 10) {
+                feedback.className = 'essay-feedback show poor';
+                feedback.innerHTML = '⚠️ Jawaban terlalu singkat! Silakan tulis jawaban yang lebih lengkap.';
+                example.style.display = 'none';
+                return;
+            }
+
+            let foundKeywords = [];
+            essayKeywords.forEach(keyword => {
+                if (answer.includes(keyword)) {
+                    foundKeywords.push(keyword);
+                }
+            });
+
+            if (foundKeywords.length >= 3) {
+                feedback.className = 'essay-feedback show good';
+                feedback.innerHTML = `
+                    <strong>🌟 Bagus!</strong> Jawabanmu mencakup ${foundKeywords.length} kata kunci penting.<br>
+                    <small>Kata kunci ditemukan: ${foundKeywords.join(', ')}</small>
+                `;
+                example.style.display = 'block';
+            } else if (foundKeywords.length >= 1) {
+                feedback.className = 'essay-feedback show medium';
+                feedback.innerHTML = `
+                    <strong>👍 Cukup!</strong> Jawabanmu mencakup ${foundKeywords.length} kata kunci. Coba tambahkan penjelasan lebih detail.<br>
+                    <small>Kata kunci ditemukan: ${foundKeywords.join(', ')}</small>
+                `;
+                example.style.display = 'block';
+            } else {
+                feedback.className = 'essay-feedback show poor';
+                feedback.innerHTML = `
+                    <strong>❌ Kurang.</strong> Jawabanmu belum mencakup kata kunci yang relevan. Coba baca kembali materi tentang globalisasi.
+                `;
+                example.style.display = 'block';
+            }
+        }
+
+        // ============================================
+        // LEADERBOARD FUNCTIONS
+        // ============================================
+        function getLeaderboard() {
+            const data = localStorage.getItem('eduips_leaderboard');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveScore() {
+            const name = document.getElementById('studentName').value.trim();
+            const level = document.getElementById('studentLevel').value;
+
+            if (!name) {
+                alert('Silakan masukkan nama terlebih dahulu!');
+                return;
+            }
+
+            if (lastQuizScore === 0) {
+                alert('Kamu belum mengerjakan kuis! Silakan kerjakan kuis terlebih dahulu.');
+                return;
+            }
+
+            let leaderboard = getLeaderboard();
+            
+            // Check if name already exists, update score
+            const existingIdx = leaderboard.findIndex(s => s.name === name && s.level === level);
+            if (existingIdx >= 0) {
+                if (lastQuizScore > leaderboard[existingIdx].score) {
+                    leaderboard[existingIdx].score = lastQuizScore;
+                }
+            } else {
+                leaderboard.push({
+                    name: name,
+                    score: lastQuizScore,
+                    level: level
+                });
+            }
+
+            // Sort by score descending and keep top 10
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 10);
+
+            localStorage.setItem('eduips_leaderboard', JSON.stringify(leaderboard));
+            renderLeaderboard();
+            
+            document.getElementById('studentName').value = '';
+            alert('✅ Skor berhasil disimpan!');
+        }
+
+        function renderLeaderboard() {
+            const leaderboard = getLeaderboard();
+            const tbody = document.getElementById('leaderboardBody');
+            
+            if (leaderboard.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; opacity:0.7;">Belum ada data ranking. Kerjakan kuis dan simpan skormu!</td></tr>';
+                return;
+            }
+
+            const medals = ['🥇', '🥈', '🥉'];
+            
+            tbody.innerHTML = leaderboard.map((student, idx) => `
+                <tr>
+                    <td><span class="medal">${idx < 3 ? medals[idx] : (idx + 1)}</span></td>
+                    <td>${student.name}</td>
+                    <td><strong>${student.score}</strong></td>
+                    <td>${student.level}</td>
+                </tr>
+            `).join('');
+        }
+
+        function resetLeaderboard() {
+            if (confirm('Yakin ingin menghapus semua data ranking?')) {
+                localStorage.removeItem('eduips_leaderboard');
+                renderLeaderboard();
+            }
+        }
+
+        // Initialize leaderboard
+        renderLeaderboard();
+
+        // ============================================
+        // FOOTER YEAR
+        // ============================================
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // ============================================
+        // SMOOTH SCROLL FOR NAV LINKS
+        // ============================================
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                // Close mobile menu
+                document.getElementById('navLinks').classList.remove('mobile-active');
+            });
+        });
+
+        // ============================================
+        // CLOSE SEARCH ON OUTSIDE CLICK
+        // ============================================
+        document.addEventListener('click', function(e) {
+            const searchContainer = document.getElementById('searchContainer');
+            if (!searchContainer.contains(e.target) && !e.target.closest('[onclick*="toggleSearch"]')) {
+                searchContainer.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
