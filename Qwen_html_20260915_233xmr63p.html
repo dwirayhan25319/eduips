@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduIPS - Portal Pembelajaran IPS SMP & SMA</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+  body { background: #f4f7fb; color: #333; line-height: 1.6; transition: 0.3s; }
+  body.dark { background: #1a1a2e; color: #e0e0e0; }
+
+  /* NAVBAR */
+  nav {
+    background: linear-gradient(90deg, #1e3c72, #2a5298);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  nav .logo { color: #fff; font-size: 1.5rem; font-weight: bold; }
+  nav .logo span { color: #ffd700; }
+  nav ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; }
+  nav ul li a { color: #fff; text-decoration: none; font-weight: 500; transition: 0.3s; }
+  nav ul li a:hover { color: #ffd700; }
+  .nav-controls { display: flex; gap: 10px; align-items: center; }
+  .dark-toggle, .search-toggle {
+    background: #ffd700; color: #1e3c72; border: none;
+    padding: 8px 12px; border-radius: 20px; cursor: pointer; font-weight: bold;
+  }
+
+  /* SEARCH BAR */
+  .search-bar {
+    display: none;
+    padding: 15px 30px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  body.dark .search-bar { background: #16213e; }
+  .search-bar.active { display: block; }
+  .search-bar input {
+    width: 100%; padding: 10px 15px; border: 2px solid #2a5298;
+    border-radius: 25px; font-size: 1rem; outline: none;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #fff; padding: 80px 20px; text-align: center;
+  }
+  .hero h1 { font-size: 3rem; margin-bottom: 15px; }
+  .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 25px; }
+  .hero button {
+    background: #ffd700; color: #1e3c72; border: none;
+    padding: 12px 30px; font-size: 1rem; font-weight: bold;
+    border-radius: 30px; cursor: pointer; transition: 0.3s;
+  }
+  .hero button:hover { background: #fff; transform: translateY(-3px); }
+
+  /* SECTION */
+  section { padding: 60px 20px; max-width: 1200px; margin: auto; }
+  section h2 {
+    text-align: center; font-size: 2.2rem; color: #1e3c72;
+    margin-bottom: 40px; position: relative;
+  }
+  body.dark section h2 { color: #ffd700; }
+  section h2::after {
+    content: ''; display: block; width: 80px; height: 4px;
+    background: #ffd700; margin: 10px auto; border-radius: 2px;
+  }
+
+  /* JENJANG SELECTOR */
+  .jenjang-selector {
+    display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;
+  }
+  .jenjang-btn {
+    background: #fff; border: 2px solid #2a5298; color: #2a5298;
+    padding: 12px 30px; border-radius: 25px; cursor: pointer;
+    font-weight: bold; font-size: 1rem; transition: 0.3s;
+  }
+  body.dark .jenjang-btn { background: #16213e; color: #ffd700; border-color: #ffd700; }
+  .jenjang-btn.active { background: #2a5298; color: #fff; }
+
+  /* CLASS TABS */
+  .class-tabs {
+    display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;
+  }
+  .class-btn {
+    background: #fff; border: 2px solid #ffd700; color: #1e3c72;
+    padding: 8px 20px; border-radius: 20px; cursor: pointer;
+    font-weight: 600; transition: 0.3s;
+  }
+  body.dark .class-btn { background: #16213e; color: #ffd700; }
+  .class-btn.active { background: #ffd700; color: #1e3c72; }
+
+  /* CARDS */
+  .cards {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+  }
+  .card {
+    background: #fff; border-radius: 15px; padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: 0.3s;
+    border-top: 5px solid #2a5298;
+  }
+  body.dark .card { background: #16213e; }
+  .card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+  .card .icon { font-size: 2.5rem; margin-bottom: 10px; }
+  .card h3 { color: #1e3c72; margin-bottom: 10px; }
+  body.dark .card h3 { color: #ffd700; }
+  .card p { color: #555; font-size: 0.95rem; }
+  body.dark .card p { color: #bbb; }
+
+  /* MATERI CONTENT */
+  .materi-content {
+    background: #fff; padding: 30px; border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); display: none;
+  }
+  body.dark .materi-content { background: #16213e; }
+  .materi-content.active { display: block; animation: fadeIn 0.5s; }
+  .materi-content h3 { color: #1e3c72; margin-bottom: 15px; font-size: 1.5rem; }
+  body.dark .materi-content h3 { color: #ffd700; }
+  .materi-content ul { margin-left: 20px; margin-bottom: 20px; }
+  .materi-content ul li { margin-bottom: 8px; }
+  .materi-img {
+    width: 100%; height: 200px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; margin-bottom: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+  }
+  .download-btn {
+    background: #28a745; color: #fff; border: none;
+    padding: 10px 20px; border-radius: 25px; cursor: pointer;
+    font-weight: bold; margin-top: 15px;
+  }
+  .download-btn:hover { background: #218838; }
+
+  /* VIDEO */
+  .video-container {
+    position: relative; padding-bottom: 56.25%; height: 0;
+    overflow: hidden; border-radius: 15px; margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  .video-container iframe {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; border: 0;
+  }
+
+  /* QUIZ */
+  .quiz-box {
+    background: #fff; padding: 30px; border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); max-width: 700px; margin: auto;
+  }
+  body.dark .quiz-box { background: #16213e; }
+  .quiz-box h3 { color: #1e3c72; margin-bottom: 20px; }
+  body.dark .quiz-box h3 { color: #ffd700; }
+  .quiz-option {
+    display: block; background: #f4f7fb; padding: 12px 15px;
+    margin: 10px 0; border-radius: 8px; cursor: pointer;
+    transition: 0.3s; border: 2px solid transparent;
+  }
+  body.dark .quiz-option { background: #1a1a2e; color: #e0e0e0; }
+  .quiz-option:hover { background: #e3ecf7; }
+  body.dark .quiz-option:hover { background: #2a2a4e; }
+  .quiz-option.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+  .quiz-option.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+  #quizResult { margin-top: 20px; font-weight: bold; text-align: center; font-size: 1.1rem; }
+  #nextBtn {
+    margin-top: 15px; background: #2a5298; color: #fff; border: none;
+    padding: 10px 25px; border-radius: 25px; cursor: pointer; display: none;
+  }
+
+  /* ESSAY */
+  .essay-box {
+    background: #fff; padding: 30px; border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); max-width: 700px; margin: 30px auto 0;
+  }
+  body.dark .essay-box { background: #16213e; }
+  .essay-box textarea {
+    width: 100%; padding: 10px; border: 2px solid #2a5298;
+    border-radius: 10px; font-size: 1rem; min-height: 100px;
+    outline: none; font-family: inherit;
+  }
+  .essay-box button {
+    background: #2a5298; color: #fff; border: none;
+    padding: 10px 25px; border-radius: 25px; cursor: pointer;
+    margin-top: 10px; font-weight: bold;
+  }
+  .essay-feedback {
+    margin-top: 15px; padding: 15px; border-radius: 10px;
+    background: #e3ecf7; display: none;
+  }
+  body.dark .essay-feedback { background: #1a1a2e; }
+
+  /* LEADERBOARD */
+  .leaderboard {
+    background: #fff; padding: 30px; border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); max-width: 600px; margin: auto;
+  }
+  body.dark .leaderboard { background: #16213e; }
+  .leaderboard h3 { color: #1e3c72; margin-bottom: 20px; text-align: center; }
+  body.dark .leaderboard h3 { color: #ffd700; }
+  .leaderboard input {
+    width: 100%; padding: 10px; border: 2px solid #2a5298;
+    border-radius: 10px; margin-bottom: 15px; outline: none;
+  }
+  .leaderboard table { width: 100%; border-collapse: collapse; }
+  .leaderboard th, .leaderboard td {
+    padding: 10px; text-align: left; border-bottom: 1px solid #ddd;
+  }
+  .leaderboard th { background: #2a5298; color: #fff; }
+  .leaderboard tr:nth-child(even) { background: #f4f7fb; }
+  body.dark .leaderboard tr:nth-child(even) { background: #1a1a2e; }
+
+  /* FOOTER */
+  footer {
+    background: #1e3c72; color: #fff; text-align: center;
+    padding: 25px; margin-top: 40px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media(max-width: 768px) {
+    nav { flex-direction: column; }
+    .hero h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Edu<span>IPS</span></div>
+  <ul>
+    <li><a href="#beranda">Beranda</a></li>
+    <li><a href="#tentang">Tentang</a></li>
+    <li><a href="#materi">Materi</a></li>
+    <li><a href="#video">Video</a></li>
+    <li><a href="#kuis">Kuis</a></li>
+    <li><a href="#essay">Essay</a></li>
+    <li><a href="#ranking">Ranking</a></li>
+  </ul>
+  <div class="nav-controls">
+    <button class="search-toggle" onclick="toggleSearch()">🔍</button>
+    <button class="dark-toggle" onclick="toggleDark()">🌙</button>
+  </div>
+</nav>
+
+<!-- SEARCH BAR -->
+<div class="search-bar" id="searchBar">
+  <input type="text" id="searchInput" placeholder="Cari materi (contoh: geografi, sejarah, ekonomi)..." onkeyup="searchMateri()">
+</div>
+
+<!-- HERO -->
+<header class="hero" id="beranda">
+  <h1>🌍 Selamat Datang di EduIPS</h1>
+  <p>Portal pembelajaran Ilmu Pengetahuan Sosial untuk jenjang SMP & SMA. Lengkap dengan materi, video, kuis, essay, dan sistem ranking!</p>
+  <button onclick="document.getElementById('materi').scrollIntoView({behavior:'smooth'})">Mulai Belajar</button>
+</header>
+
+<!-- TENTANG IPS -->
+<section id="tentang">
+  <h2>Apa itu IPS?</h2>
+  <p style="text-align:center; max-width:800px; margin:auto; font-size:1.05rem;">
+    <strong>Ilmu Pengetahuan Sosial (IPS)</strong> adalah ilmu yang mempelajari kehidupan manusia dalam masyarakat,
+    meliputi aspek geografi, sejarah, sosiologi, dan ekonomi. IPS diajarkan dari SD hingga SMA dengan tingkat kedalaman berbeda.
+  </p>
+  <div class="cards" style="margin-top:40px;">
+    <div class="card"><div class="icon">🗺️</div><h3>Geografi</h3><p>Mempelajari bumi, iklim, dan interaksi manusia dengan lingkungan.</p></div>
+    <div class="card"><div class="icon">📜</div><h3>Sejarah</h3><p>Mempelajari peristiwa masa lalu yang membentuk peradaban.</p></div>
+    <div class="card"><div class="icon">👥</div><h3>Sosiologi</h3><p>Mempelajari masyarakat dan interaksi sosial.</p></div>
+    <div class="card"><div class="icon">💰</div><h3>Ekonomi</h3><p>Mempelajari kegiatan produksi, distribusi, dan konsumsi.</p></div>
+  </div>
+</section>
+
+<!-- MATERI -->
+<section id="materi">
+  <h2>📚 Materi Pembelajaran</h2>
+
+  <!-- JENJANG SELECTOR -->
+  <div class="jenjang-selector">
+    <button class="jenjang-btn active" onclick="selectJenjang('smp', this)">🎒 SMP (Kelas 7-9)</button>
+    <button class="jenjang-btn" onclick="selectJenjang('sma', this)">🎓 SMA (Kelas 10-12)</button>
+  </div>
+
+  <!-- SMP CONTENT -->
+  <div id="smp-content">
+    <div class="class-tabs">
+      <button class="class-btn active" onclick="selectClass('smp7', this)">Kelas 7</button>
+      <button class="class-btn" onclick="selectClass('smp8', this)">Kelas 8</button>
+      <button class="class-btn" onclick="selectClass('smp9', this)">Kelas 9</button>
+    </div>
+
+    <div id="smp7" class="materi-content active">
+      <div class="materi-img" style="background: linear-gradient(135deg, #667eea, #764ba2);">👨‍👩‍👧</div>
+      <h3>Kelas 7 - Keluarga & Lingkungan</h3>
+      <ul>
+        <li><strong>Keberadaan Diri & Keluarga:</strong> Asal-usul keluarga, silsilah, dan peran anggota keluarga.</li>
+        <li><strong>Lingkungan Tempat Tinggal:</strong> Denah, peta, dan arah mata angin.</li>
+        <li><strong>Interaksi Antarmanusia:</strong> Interaksi sosial di keluarga, sekolah, dan masyarakat.</li>
+        <li><strong>Keadaan Alam Indonesia:</strong> Kondisi geografis, iklim, dan sumber daya alam.</li>
+        <li><strong>Kegiatan Ekonomi:</strong> Produksi, distribusi, konsumsi dalam keluarga.</li>
+      </ul>
+      <button class="download-btn" onclick="downloadPDF('Kelas 7 SMP - Keluarga & Lingkungan')">📥 Download PDF</button>
+    </div>
+
+    <div id="smp8" class="materi-content">
+      <div class="materi-img" style="background: linear-gradient(135deg, #f093fb, #f5576c);">🏛️</div>
+      <h3>Kelas 8 - Kehidupan Sosial & Pergerakan Nasional</h3>
+      <ul>
+        <li><strong>Kondisi Fisik & Sosial Indonesia:</strong> Letak geografis, kependudukan, dan budaya.</li>
+        <li><strong>Masalah Kependudukan:</strong> Jumlah, pertumbuhan, dan kualitas penduduk.</li>
+        <li><strong>Keragaman Budaya:</strong> Suku, bahasa, agama, dan adat istiadat Indonesia.</li>
+        <li><strong>Kegiatan Ekonomi Masyarakat:</strong> Perdagangan, industri, dan jasa.</li>
+        <li><strong>Pergerakan Nasional:</strong> Budi Utomo, Sumpah Pemuda, hingga Proklamasi 1945.</li>
+      </ul>
+      <button class="download-btn" onclick="downloadPDF('Kelas 8 SMP - Kehidupan Sosial & Pergerakan Nasional')">📥 Download PDF</button>
+    </div>
+
+    <div id="smp9" class="materi-content">
+      <div class="materi-img" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">🌏</div>
+      <h3>Kelas 9 - Negara Asia Tenggara & Benua-benua</h3>
+      <ul>
+        <li><strong>Negara-Negara ASEAN:</strong> Karakteristik negara Asia Tenggara.</li>
+        <li><strong>Tiongkok & Jepang:</strong> Kondisi geografis, ekonomi, dan budaya.</li>
+        <li><strong>Negara Inggris & Amerika Serikat:</strong> Kekuatan ekonomi dunia.</li>
+        <li><strong>Benua-benua di Dunia:</strong> Asia, Afrika, Amerika, Eropa, Australia, Antartika.</li>
+        <li><strong>Perdagangan Internasional:</strong> Ekspor, impor, dan kerja sama ekonomi.</li>
+      </ul>
+      <button class="download-btn" onclick="downloadPDF('Kelas 9 SMP - Negara ASEAN & Benua')">📥 Download PDF</button>
+    </div>
+  </div>
+
+  <!-- SMA CONTENT -->
+  <div id="sma-content" style="display:none;">
+    <div class="class-tabs">
+      <button class="class-btn active" onclick="selectClass('sma10', this)">Kelas 10</button>
+      <button class="class-btn" onclick="selectClass('sma11', this)">Kelas 11</button>
+      <button class="class-btn" onclick="selectClass('sma12', this)">Kelas 12</button>
+    </div>
+
+    <div id="sma10" class="materi-content active">
+      <div class="materi-img" style="background: linear-gradient(135deg, #fa709a, #fee140);">🔬</div>
+      <h3>Kelas 10 - Ilmu Sosial & Penelitian</h3>
+      <ul>
+        <li><strong>Pengantar Ilmu Sosial:</strong> Konsep, objek, dan metode ilmu sosial.</li>
+        <li><strong>Penelitian Sosial:</strong> Jenis, langkah-langkah, dan teknik pengumpulan data.</li>
+        <li><strong>Manusia, Tempat, & Lingkungan:</strong> Interaksi manusia dengan lingkungan alam.</li>
+        <li><strong>Dinamika Kependudukan Indonesia:</strong> Demografi, migrasi, dan urbanisasi.</li>
+        <li><strong>Potensi Sumber Daya Alam:</strong> Pengelolaan SDA berkelanjutan.</li>
+      </ul>
+      <button class="download-btn" onclick="downloadPDF('Kelas 10 SMA - Ilmu Sosial & Penelitian')">📥 Download PDF</button>
+    </div>
+
+    <div id="sma11" class="materi-content">
+      <div class="materi-img" style="background: linear-gradient(135deg, #30cfd0, #330867);">🤝</div>
+      <h3>Kelas 11 - Interaksi & Kelompok Sosial</h3>
+      <ul>
+        <li><strong>Interaksi Sosial:</strong> Syarat, bentuk, dan faktor pendorong.</li>
+        <li><strong>Sosialisasi & Pembentukan Kepribadian:</strong> Agen sosialisasi (keluarga, sekolah, masyarakat, media).</li>
+        <li><strong>Kelompok Sosial:</strong> Klasifikasi, ciri, dan dinamika kelompok.</li>
+        <li><strong>Konflik & Integrasi Sosial:</strong> Penyebab, bentuk, dan cara penyelesaian konflik.</li>
+        <li><strong>Struktur & Diferensiasi Sosial:</strong> Stratifikasi sosial, mobilitas sosial.</li>
+      </ul>
+      <button class="download-btn" onclick="downloadPDF('Kelas 11 SMA - Interaksi & Kelompok Sosial')">📥 Download PDF</button>
+    </div>
+
+    <div id="sma12" class="materi-content">
+      <div class="materi-img" style="background: linear-gradient(135deg, #a8edea, #fed6e3); color:#333;">🌐</div>
+      <h3>Kelas 12 - Ketimpangan Sosial & Globalisasi</h3>
+      <ul>
+        <li><strong>Ketimpangan Sosial:</strong> Penyebab, dampak, dan upaya pengurangan ketimpangan.</li>
+        <li><strong>Globalisasi:</strong> Pengertian, ciri, dampak positif & negatif.</li>
+        <li><strong>Perubahan Sosial:</strong> Teori, faktor, dan bentuk perubahan sosial.</li>
+        <li><strong>Pemberdayaan Masyarakat:</strong> Konsep, prinsip, dan contoh program.</li>
+        <li><strong>Masyarakat Digital:</strong> Tantangan dan peluang di era digital.</li>
+      </ul>
+      <button class="download-btn" onclick="downloadPDF('Kelas 12 SMA - Ketimpangan & Globalisasi')">📥 Download PDF</button>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="video">
+  <h2>📹 Video Pembelajaran</h2>
+  <div class="cards">
+    <div>
+      <h3 style="color:#1e3c72; margin-bottom:10px;">🗺️ Geografi Indonesia</h3>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/7CwK3VqQ8bU" allowfullscreen></iframe>
+      </div>
+    </div>
+    <div>
+      <h3 style="color:#1e3c72; margin-bottom:10px;">📜 Sejarah Kemerdekaan</h3>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/1BR1XjYJq7E" allowfullscreen></iframe>
+      </div>
+    </div>
+    <div>
+      <h3 style="color:#1e3c72; margin-bottom:10px;">💰 Konsep Ekonomi Dasar</h3>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/5vqM0wR2m8I" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KUIS -->
+<section id="kuis">
+  <h2>🎯 Kuis Pilihan Ganda</h2>
+  <div class="quiz-box">
+    <h3 id="quizQuestion">Memuat soal...</h3>
+    <div id="quizOptions"></div>
+    <div id="quizResult"></div>
+    <button id="nextBtn" onclick="nextQuestion()">Soal Berikutnya →</button>
+  </div>
+</section>
+
+<!-- ESSAY -->
+<section id="essay">
+  <h2>✍️ Latihan Essay</h2>
+  <div class="essay-box">
+    <h3 style="color:#1e3c72; margin-bottom:15px;">Soal: Jelaskan 3 dampak positif globalisasi bagi masyarakat Indonesia!</h3>
+    <textarea id="essayAnswer" placeholder="Tulis jawabanmu di sini..."></textarea>
+    <button onclick="checkEssay()">Cek Jawaban</button>
+    <div class="essay-feedback" id="essayFeedback"></div>
+  </div>
+</section>
+
+<!-- LEADERBOARD -->
+<section id="ranking">
+  <h2>🏆 Ranking Siswa</h2>
+  <div class="leaderboard">
+    <h3>Masukkan Namamu & Simpan Skor!</h3>
+    <input type="text" id="playerName" placeholder="Nama kamu...">
+    <button onclick="saveScore()" style="background:#28a745; color:#fff; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-weight:bold; width:100%;">💾 Simpan Skor</button>
+    <table style="margin-top:20px;">
+      <thead>
+        <tr><th>Rank</th><th>Nama</th><th>Skor</th><th>Jenjang</th></tr>
+      </thead>
+      <tbody id="leaderboardBody"></tbody>
+    </table>
+    <button onclick="clearLeaderboard()" style="background:#dc3545; color:#fff; border:none; padding:8px 15px; border-radius:20px; cursor:pointer; margin-top:15px; font-size:0.9rem;">🗑️ Reset Ranking</button>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 EduIPS - Portal Pembelajaran IPS SMP & SMA</p>
+  <p>Dibuat untuk mendukung pembelajaran siswa Indonesia 🇮🇩</p>
+</footer>
+
+<script>
+  // DARK MODE
+  function toggleDark() {
+    document.body.classList.toggle('dark');
+  }
+
+  // SEARCH
+  function toggleSearch() {
+    document.getElementById('searchBar').classList.toggle('active');
+  }
+  function searchMateri() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll('.materi-content').forEach(m => {
+      const text = m.innerText.toLowerCase();
+      m.style.display = text.includes(keyword) ? 'block' : 'none';
+    });
+  }
+
+  // JENJANG
+  function selectJenjang(jenjang, btn) {
+    document.querySelectorAll('.jenjang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('smp-content').style.display = jenjang === 'smp' ? 'block' : 'none';
+    document.getElementById('sma-content').style.display = jenjang === 'sma' ? 'block' : 'none';
+  }
+
+  // CLASS TABS
+  function selectClass(id, btn) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.class-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const container = parent.parentElement;
+    container.querySelectorAll('.materi-content').forEach(m => m.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  // DOWNLOAD PDF (print to PDF)
+  function downloadPDF(title) {
+    const content = document.getElementById(event.target.previousElementSibling ? 'materi' : 'materi').innerHTML;
+    const printWindow = window.open('', '', 'width=800,height=600');
+    printWindow.document.write(`
+      <html><head><title>${title}</title>
+      <style>body{font-family:Arial;padding:30px;} h1{color:#1e3c72;} ul{margin-left:20px;} li{margin:8px 0;}</style>
+      </head><body>
+      <h1>${title}</h1>
+      <p>Dicetak dari EduIPS - ${new Date().toLocaleDateString('id-ID')}</p>
+      <hr>
+      ${document.querySelector('.materi-content.active').innerHTML}
+      </body></html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+  }
+
+  // QUIZ
+  const questions = [
+    {q:"Apa yang dipelajari dalam Geografi?", options:["Peristiwa masa lalu","Bumi dan interaksi manusia dengan lingkungan","Kegiatan jual beli","Struktur masyarakat"], answer:1},
+    {q:"Proklamasi kemerdekaan Indonesia terjadi pada tanggal?", options:["17 Agustus 1945","1 Juni 1945","28 Oktober 1928","20 Mei 1908"], answer:0},
+    {q:"Ilmu yang mempelajari interaksi manusia dalam masyarakat adalah?", options:["Ekonomi","Geografi","Sosiologi","Sejarah"], answer:2},
+    {q:"Kegiatan menghasilkan barang atau jasa disebut?", options:["Konsumsi","Distribusi","Produksi","Investasi"], answer:2},
+    {q:"Lapisan udara yang menyelimuti bumi disebut?", options:["Litosfer","Hidrosfer","Biosfer","Atmosfer"], answer:3},
+    {q:"Organisasi pergerakan nasional pertama di Indonesia adalah?", options:["Sarekat Islam","Budi Utomo","Muhammadiyah","PNI"], answer:1},
+    {q:"ASEAN didirikan pada tahun?", options:["1945","1967","1975","1985"], answer:1},
+    {q:"Penelitian sosial yang menggunakan angka/statistik disebut?", options:["Kualitatif","Kuantitatif","Deskriptif","Historis"], answer:1},
+    {q:"Perpindahan penduduk dari desa ke kota disebut?", options:["Transmigrasi","Urbanisasi","Emigrasi","Imigrasi"], answer:1},
+    {q:"Dampak negatif globalisasi adalah?", options:["Kemajuan teknologi","Lunturnya budaya lokal","Akses informasi mudah","Peningkatan ekonomi"], answer:1}
+  ];
+  let currentQ = 0, score = 0;
+
+  function loadQuestion() {
+    const q = questions[currentQ];
+    document.getElementById('quizQuestion').innerText = `Soal ${currentQ+1}: ${q.q}`;
+    const optDiv = document.getElementById('quizOptions');
+    optDiv.innerHTML = '';
+    q.options.forEach((opt, i) => {
+      const div = document.createElement('div');
+      div.className = 'quiz-option';
+      div.innerText = opt;
+      div.onclick = () => checkAnswer(i, div);
+      optDiv.appendChild(div);
+    });
+    document.getElementById('quizResult').innerText = '';
+    document.getElementById('nextBtn').style.display = 'none';
+  }
+  function checkAnswer(selected, el) {
+    const q = questions[currentQ];
+    const options = document.querySelectorAll('.quiz-option');
+    options.forEach(o => o.style.pointerEvents = 'none');
+    if (selected === q.answer) {
+      el.classList.add('correct');
+      document.getElementById('quizResult').innerText = '✅ Benar! Hebat!';
+      document.getElementById('quizResult').style.color = '#28a745';
+      score++;
+    } else {
+      el.classList.add('wrong');
+      options[q.answer].classList.add('correct');
+      document.getElementById('quizResult').innerText = '❌ Kurang tepat. Jawaban: ' + q.options[q.answer];
+      document.getElementById('quizResult').style.color = '#dc3545';
+    }
+    document.getElementById('nextBtn').style.display = 'inline-block';
+  }
+  function nextQuestion() {
+    currentQ++;
+    if (currentQ < questions.length) {
+      loadQuestion();
+    } else {
+      document.getElementById('quizQuestion').innerText = '🎉 Kuis Selesai!';
+      document.getElementById('quizOptions').innerHTML = `<p style="font-size:1.2rem; text-align:center;">Skor kamu: <strong>${score} / ${questions.length}</strong></p>`;
+      document.getElementById('quizResult').innerText = score >= 8 ? 'Luar biasa! 🏆' : score >= 5 ? 'Bagus! Terus belajar!' : 'Ayo semangat belajar lagi!';
+      document.getElementById('quizResult').style.color = '#1e3c72';
+      document.getElementById('nextBtn').style.display = 'none';
+    }
+  }
+  loadQuestion();
+
+  // ESSAY
+  function checkEssay() {
+    const answer = document.getElementById('essayAnswer').value.toLowerCase();
+    const keywords = ['teknologi','informasi','komunikasi','ekonomi','budaya','pendidikan','kesehatan','transportasi','internet','global','modern'];
+    const found = keywords.filter(k => answer.includes(k));
+    const feedback = document.getElementById('essayFeedback');
+    feedback.style.display = 'block';
+    if (found.length >= 3) {
+      feedback.innerHTML = `<strong style="color:#28a745;">✅ Jawaban Bagus!</strong><br>Kamu menyebutkan ${found.length} poin penting: ${found.join(', ')}.<br><br><strong>Contoh jawaban lengkap:</strong><br>1. Kemajuan teknologi dan informasi<br>2. Pertumbuhan ekonomi melalui perdagangan internasional<br>3. Akses pendidikan dan kesehatan yang lebih baik`;
+    } else if (found.length > 0) {
+      feedback.innerHTML = `<strong style="color:#ffc107;">⚠️ Jawaban cukup baik.</strong><br>Kamu menyebutkan ${found.length} poin. Coba tambahkan aspek lain seperti teknologi, ekonomi, atau pendidikan.`;
+    } else {
+      feedback.innerHTML = `<strong style="color:#dc3545;">❌ Jawaban kurang lengkap.</strong><br>Coba sebutkan minimal 3 dampak seperti: kemajuan teknologi, pertumbuhan ekonomi, atau akses informasi.`;
+    }
+  }
+
+  // LEADERBOARD
+  function saveScore() {
+    const name = document.getElementById('playerName').value.trim();
+    if (!name) { alert('Masukkan nama dulu!'); return; }
+    const jenjang = document.querySelector('.jenjang-btn.active').innerText.includes('SMP') ? 'SMP' : 'SMA';
+    let leaderboard = JSON.parse(localStorage.getItem('eduips_leaderboard') || '[]');
+    leaderboard.push({name, score, jenjang, date: new Date().toLocaleDateString('id-ID')});
+    leaderboard.sort((a,b) => b.score - a.score);
+    leaderboard = leaderboard.slice(0, 10);
+    localStorage.setItem('eduips_leaderboard', JSON.stringify(leaderboard));
+    renderLeaderboard();
+    alert('✅ Skor tersimpan!');
+  }
+  function renderLeaderboard() {
+    const leaderboard = JSON.parse(localStorage.getItem('eduips_leaderboard') || '[]');
+    const tbody = document.getElementById('leaderboardBody');
+    tbody.innerHTML = '';
+    if (leaderboard.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Belum ada skor. Jadilah yang pertama!</td></tr>';
+      return;
+    }
+    leaderboard.forEach((p, i) => {
+      const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i+1);
+      tbody.innerHTML += `<tr><td>${medal}</td><td>${p.name}</td><td><strong>${p.score}/${questions.length}</strong></td><td>${p.jenjang}</td></tr>`;
+    });
+  }
+  function clearLeaderboard() {
+    if (confirm('Yakin ingin reset ranking?')) {
+      localStorage.removeItem('eduips_leaderboard');
+      renderLeaderboard();
+    }
+  }
+  renderLeaderboard();
+</script>
+
+</body>
+</html>
